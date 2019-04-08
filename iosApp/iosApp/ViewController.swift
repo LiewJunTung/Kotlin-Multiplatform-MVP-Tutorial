@@ -1,10 +1,23 @@
 import UIKit
 import app
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, LoginView {
+
+    var presenter: LoginPresenter? = nil
+    @IBOutlet weak var textView: UILabel!
+    @IBOutlet weak var editText: UITextField!
+
+    @IBAction func clickSubmitButton(_ sender: Any) {
+        presenter?.processLogin(password: editText.text ?? "")
+    }
+
+    func loginResult(result: String) {
+        textView.text = result
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        label.text = Proxy().proxyHello()
+        presenter = LoginPresenterImpl(loginView: self)
     }
 
     override func didReceiveMemoryWarning() {

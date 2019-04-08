@@ -39,7 +39,9 @@ kotlin {
     // This is for iPhone emulator
     // Switch here to iosArm64 (or iosArm32) to build library for iPhone device
     iosX64("ios") {
-        compilations.main.outputKinds("framework")
+        binaries {
+            framework("app")
+        }
     }
     sourceSets {
         commonMain {
@@ -77,15 +79,17 @@ kotlin {
 // Before opening the project from iosApp directory in Xcode,
 // make sure all Gradle infrastructure exists (gradle.wrapper, gradlew).
 task copyFramework {
-    def buildType = project.findProperty('kotlin.build.type') ?: 'DEBUG'
+    String buildType = project.findProperty('kotlin.build.type') ?: 'DEBUG'
     def target = project.findProperty('kotlin.target') ?: 'ios'
-    dependsOn kotlin.targets."$target".compilations.main.linkTaskName('FRAMEWORK', buildType)
+    dependsOn "linkApp${buildType.toLowerCase().capitalize()}FrameworkIos"
+    //kotlin.targets."$target".compilations.main.linkTaskName('FRAMEWORK', buildType)
 
     doLast {
-        def srcFile = kotlin.targets."$target".compilations.main.getBinary('FRAMEWORK', buildType)
-        def targetDir = getProperty('configuration.build.dir')
+        def srcFile = file("$buildDir/bin/ios/app${buildType.toLowerCase().capitalize()}Framework")
+        def targetDir = getProperty("configuration.build.dir")
+
         copy {
-            from srcFile.parent
+            from srcFile
             into targetDir
             include 'app.framework/**'
             include 'app.framework.dSYM'

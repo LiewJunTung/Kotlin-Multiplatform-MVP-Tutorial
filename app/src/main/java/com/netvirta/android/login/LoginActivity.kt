@@ -21,11 +21,7 @@ class LoginActivity : AppCompatActivity(), LoginView {
         }
     }
 
-    override fun loginResult(result: Boolean) {
-        if (result){
-            textView.text = "Login Successful"
-        } else {
-            textView.text = "Login Failed"
-        }
+    override fun loginResult(result: String) {
+        textView.text = result
     }
 }

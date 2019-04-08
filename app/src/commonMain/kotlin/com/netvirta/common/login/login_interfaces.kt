@@ -1,7 +1,7 @@
 package com.netvirta.common.login
 
 interface LoginView {
-    fun loginResult(result: Boolean)
+    fun loginResult(result: String)
 }
 
 interface LoginPresenter {
